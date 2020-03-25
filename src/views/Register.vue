@@ -7,9 +7,10 @@
             <!-- logo -->
             <div class="iconfont iconnew"></div>
             <input type="text" placeholder="用户名 / 手机号码">
+            <input type="text" placeholder="昵称">
             <input type="password" placeholder="密码">
-            <button>登录</button>
-            <div class="reminder">还没账号？<a href="http://localhost:8080/register">去注册</a></div>
+            <button>注册</button>
+            <div class="reminder">已有账号？<a href="http://localhost:8080/login">去登录</a></div>
         </div>
     </div>
 </template>
@@ -75,6 +76,8 @@ export default {
 .reminder a {
     color: #cc3300;
 }
+
+
 
 
 
