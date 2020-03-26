@@ -6,6 +6,8 @@
 </template>
 
 <style lang="less">
+
+@import url('../node_modules/vant/lib/index.css');
 // 公共的样式
 @import url("//at.alicdn.com/t/font_1426139_jm7n2373nlh.css");
 
@@ -33,21 +35,21 @@ i, em{
 
 //媒体查询
 .banxin {
-    height: 16.666667rem;
+    height: 17.708333rem;
   }
 img {
     width: 100%;
 }
 //   先构建媒体查询与版心
-  @media screen and (min-width: 400px){
+  @media screen and (min-width: 375px){
     .banxin {
-      width: 400px;
+      width: 375px;
       margin: 0 auto;
     }
     /* 版心此时是750 */
   // 把版心分成10份
     html {
-        font-size: 40px;
+        font-size: 37.5px;
     }
 }
 
