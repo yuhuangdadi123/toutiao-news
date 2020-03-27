@@ -55,9 +55,15 @@ export default {
             method:"post",
             data:this.form
         }).then(res=>{
-            console.log(res);
-            const {message} = res.data;
+            // console.log(res);
+            // const {message} = res.data;
+            const {message, data} = res.data;
+            // 登录成功提示
             this.$toast.success(message);
+            // 把data存到本地存储里面
+             // localStorage只能保存字符串，需要使用JSON.stringify来把对象转换成字符串
+            localStorage.setItem('userInfo',JSON.stringify(data));
+            this.$router.push("/personal");
         })
     }
     }

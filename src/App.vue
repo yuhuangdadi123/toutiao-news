@@ -1,12 +1,12 @@
 <template>
   <div id="app">
-    
+    <!-- 匹配的组件的坑 -->
     <router-view/>
   </div>
 </template>
 
 <style lang="less">
-
+// 导入vant的样式 例如登录界面的那些input
 @import url('../node_modules/vant/lib/index.css');
 // 公共的样式
 @import url("//at.alicdn.com/t/font_1426139_jm7n2373nlh.css");
