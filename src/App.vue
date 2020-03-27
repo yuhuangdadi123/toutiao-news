@@ -35,21 +35,21 @@ i, em{
 
 //媒体查询
 .banxin {
-    height: 17.708333rem;
+    height: 18.133333rem
   }
 img {
     width: 100%;
 }
 //   先构建媒体查询与版心
-  @media screen and (min-width: 375px){
+  @media screen and (min-width: 360px){
     .banxin {
-      width: 375px;
+      width: 360px;
       margin: 0 auto;
     }
     /* 版心此时是750 */
   // 把版心分成10份
     html {
-        font-size: 37.5px;
+        font-size: 36px;
     }
 }
 

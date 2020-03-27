@@ -73,13 +73,13 @@ export default {
 <style lang="less" scoped>
 .banxin {
     background-color: #f2f2f2;
-    border-top: .130208rem solid #757575;
+    padding-top: .533333rem;
 }
 
 .iconicon-test {
     font-size: .651042rem;
     color: #000000;
-    margin: .520833rem 0 0 .651042rem;
+    margin: 0 0 0 .651042rem;
 }
 
 .login-form {
@@ -104,7 +104,7 @@ export default {
     border-bottom: 1px solid #000;
     background-color: #f2f2f2;
     width: 7.8125rem;
-    height: 1.12rem;
+    height: 1.2rem;
     // line-height: 1.6rem;
     padding: 0;
     font-size: .426667rem;
