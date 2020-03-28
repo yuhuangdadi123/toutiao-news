@@ -11,7 +11,17 @@
         <van-uploader :after-read="afterRead" class="uploader" />
     </div>
     <!-- 按钮列表 -->
-    <Listbar label="昵称" :tips="userInfo.nickname" />
+    <!-- 点击昵称的时候 把this.show 改成 true 让弹窗显示 -->
+    <Listbar label="昵称" 
+    :tips="userInfo.nickname" 
+     @click.native="show=true" />
+    <!-- 编辑昵称的弹窗 -->
+    <!-- 这里的v-model的作用 只要控制显示或隐藏弹窗 -->
+    <van-dialog v-model="show" title="修改昵称" show-cancel-button>
+    <van-field v-model="value" placeholder="请输入用户名" />
+    </van-dialog>
+
+
     <Listbar label="密码" tips="******" />
     <Listbar label="性别" :tips="['女','男'][userInfo.gender]" />
 
@@ -29,6 +39,8 @@ export default {
             userInfo:{},
             // 本地的用户数据
             userJson: {},
+            // 是否显示 编辑昵称的弹窗
+            show:false,
         }
     },
     components: {
@@ -82,9 +94,22 @@ export default {
                 this.handleEdit({
                     head_img:url
                 })
-
             })
         },
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
 
         //编辑用户信息的函数
         handleEdit(data){
@@ -98,7 +123,7 @@ export default {
                 data:data,
             }).then(res=>{
                 // console.log(res);
-                
+
             })
         }
 
