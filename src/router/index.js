@@ -31,6 +31,11 @@ const routes = [
 		path: "/personal",
 		component: () => import("@/views/Personal")
 	},
+	{
+		// 编辑页
+		path: "/edit",
+		component: () => import("@/views/Edit")
+	},
 ]
 
 const router = new VueRouter({

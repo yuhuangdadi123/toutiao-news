@@ -2,15 +2,11 @@
   <div class="banxin">
 
       <!-- 顶部的导航条 -->
- 		<div class="navigate-bar">
- 			<!-- $router.back()是实例下的属性，可以直接在模板中渲染 -->
- 			<span class="iconfont iconjiantou2" @click="$router.back()"></span>
- 			<strong>个人中心</strong>
- 			<!-- $router.push()是实例下的属性，可以直接在模板中渲染 -->
- 			<span class="iconfont iconshouye" @click="$router.push('/')"></span>
- 		</div>
+        <NavigateBar/>
+
 
       <!-- 头部 -->
+    <router-link to="/edit">
     <div class="header">
         <!-- 头像 -->
       <div class="avatar">
@@ -35,6 +31,7 @@
           <!-- 箭头 -->
           <span class="iconfont iconjiantou1"></span>
     </div>
+    </router-link>
 
     <Listbar v-for="(item,index) in rows" :key="index"
     :label="item.label"
@@ -53,6 +50,7 @@
 // 导入列表按钮栏的组件，import后面接上的组件变量名（变量就意味着可以随便改名字）
 // @代表src目录
 import Listbar from "@/components/Listbar"
+import NavigateBar from "@/components/navigateBar"
 import moment from "moment";
 
 export default {
@@ -72,7 +70,8 @@ export default {
  	// moment是日期处理的工具库，为了在模板中可以使用，所以需要绑定在data中
     // 注册组件,导入的子组件都必须注册才可以再模板渲染
 	components: {
-		Listbar
+        Listbar,
+        NavigateBar
     },
     // 组件加载完后触发 类似location.onload  把数据渲染页面
     mounted(){
@@ -115,25 +114,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
-.navigate-bar{
- 	line-height: 1.388889rem;
- 	display: flex;
- 	justify-content: space-between;
- 	align-items:center;
- 	padding: .138889rem .555556rem;
- 	border-bottom:1px #eee solid;
-
- 	.iconshouye{
- 		font-size: .555556rem;
-     }
-     
-     strong {
-         font-size: .555556rem;
-         font-family: '楷体';
-         color: #2bd4ee;
-     }
- }
 
 .header{
     padding: .555556rem;
