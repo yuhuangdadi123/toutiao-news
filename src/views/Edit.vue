@@ -11,10 +11,10 @@
         <van-uploader :after-read="afterRead" class="uploader" />
     </div>
     <!-- 按钮列表 -->
+
+    <!-- 昵称部分 -->
     <!-- 点击昵称的时候 把this.show 改成 true 让弹窗显示 -->
-    <Listbar label="昵称" 
-    :tips="userInfo.nickname" 
-     @click.native="show=true" />
+    <Listbar label="昵称"  :tips="userInfo.nickname" @click.native="show=true" />
     <!-- 编辑昵称的弹窗 -->
     <!-- 这里的v-model的作用 只要控制显示或隐藏弹窗 -->
     <van-dialog v-model="show" title="修改昵称" show-cancel-button @confirm="handleChangeNickname">
@@ -22,7 +22,21 @@
     <van-field v-model="nickname" placeholder="请输入用户名" />
     </van-dialog>
     
-    <Listbar label="密码" tips="******" />
+
+    <!-- 密码部分 -->
+    <Listbar label="密码" tips="******" @click.native="showPassword=true"/>
+    <!-- 修改密码弹窗 -->
+    <van-dialog v-model="showPassword" title="修改密码" show-cancel-button @confirm="handleChangePassword">
+    <!-- 弹窗里面的input -->
+    <van-field v-model="password" placeholder="请输入密码" type="password" />
+    </van-dialog>
+
+
+
+
+
+
+    <!-- 性别部分 -->
     <Listbar label="性别" :tips="['女','男'][userInfo.gender]" />
   
   </div>
@@ -41,9 +55,12 @@ export default {
             userJson: {},
             // 是否显示 编辑昵称的弹窗
             show:false,
-
+            //是否显示修改密码弹窗
+            showPassword:false,
             //单独记录昵称
             nickname:'',
+            //单独记录密码
+            password:'',
         }
     },
     components: {
@@ -128,9 +145,12 @@ export default {
             // 这个是弹出框按确定触发了 handleChangeNickname 这个方法  这个方法里面又去调用了handleEdit的方法
             // 然后才把修改后的再传，没有按确定 没有触发上面的函数方法 就不会出现没按确定就影响了
             this.userInfo.nickname = this.nickname;
+        },
+
+        handleChangePassword(){
+             this.handleEdit({ password:this.password });
+              this.userInfo.password = this.password;
         }
-
-
 
     }
 
