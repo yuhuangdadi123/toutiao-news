@@ -2,14 +2,19 @@
   <div class="navigate-bar">
     <!-- $router.back()是实例下的属性，可以直接在模板中渲染 -->
     <span class="iconfont iconjiantou2" @click="$router.back()"></span>
-    <strong>个人中心</strong>
+    <strong>{{title}}</strong>
     <!-- $router.push()是实例下的属性，可以直接在模板中渲染 -->
-    <span class="iconfont iconshouye" @click="$router.push('/')"></span>
+    <span class="iconfont iconshouye" @click="$router.push('/')" 
+    v-if="showHome"
+    ></span>
+    <span class="iconfont iconshouye" v-else="" style="opacity:0"></span>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  props:['title','showHome']
+};
 </script>
 
 <style lang="less" scoped>

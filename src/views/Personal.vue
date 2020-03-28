@@ -2,7 +2,7 @@
   <div class="banxin">
 
       <!-- 顶部的导航条 -->
-        <NavigateBar/>
+        <NavigateBar title="个人中心"  :showHome="true" />
 
 
       <!-- 头部 -->
