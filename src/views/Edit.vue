@@ -32,12 +32,15 @@
     </van-dialog>
 
 
-
-
-
-
     <!-- 性别部分 -->
-    <Listbar label="性别" :tips="['女','男'][userInfo.gender]" />
+    <Listbar label="性别" :tips="['女','男'][userInfo.gender]" @click.native="showGender=true"/>
+    <!-- 点击性别 弹出上拉菜单 -->
+    <!-- ActionSheet通过actions数组来定义展示的选项，数组的每一项是一个对象，对象属性见文档下方表格。 -->
+    <van-action-sheet v-model="showGender" 
+    close-on-click-action
+    :actions="actions" 
+    @select="onSelect" />
+
   
   </div>
 </template>
@@ -53,14 +56,25 @@ export default {
             userInfo:{},
             // 本地的用户数据
             userJson: {},
+
             // 是否显示 编辑昵称的弹窗
             show:false,
             //是否显示修改密码弹窗
             showPassword:false,
+            //是否显示修改性别弹窗
+            showGender:false,
+            //性别的选项
+            actions: [
+                // 对象的数据可以随意增加修改的，比如添加value属性用来传递给接口1/0
+                { name: '男', value: 1 },
+                { name: '女', value: 0 },
+            ],
+
             //单独记录昵称
             nickname:'',
             //单独记录密码
             password:'',
+
         }
     },
     components: {
@@ -150,7 +164,18 @@ export default {
         handleChangePassword(){
              this.handleEdit({ password:this.password });
               this.userInfo.password = this.password;
+        },
+
+        //  修改性别弹出框 选中时触发的事件
+        // item是选中的值 （当前项）
+        onSelect(item) {
+            // console.log(item);
+            this.handleEdit({ gender:item.value });
+            // 同步修改当前数据
+            this.userInfo.gender = item.value;
         }
+
+
 
     }
 
