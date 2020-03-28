@@ -17,14 +17,14 @@
      @click.native="show=true" />
     <!-- 编辑昵称的弹窗 -->
     <!-- 这里的v-model的作用 只要控制显示或隐藏弹窗 -->
-    <van-dialog v-model="show" title="修改昵称" show-cancel-button>
-    <van-field v-model="value" placeholder="请输入用户名" />
+    <van-dialog v-model="show" title="修改昵称" show-cancel-button @confirm="handleChangeNickname">
+    <!-- 弹窗里面的input -->
+    <van-field v-model="nickname" placeholder="请输入用户名" />
     </van-dialog>
-
-
+    
     <Listbar label="密码" tips="******" />
     <Listbar label="性别" :tips="['女','男'][userInfo.gender]" />
-
+  
   </div>
 </template>
 
@@ -41,6 +41,9 @@ export default {
             userJson: {},
             // 是否显示 编辑昵称的弹窗
             show:false,
+
+            //单独记录昵称
+            nickname:'',
         }
     },
     components: {
@@ -54,7 +57,7 @@ export default {
         // console.log(userJson);
         // 保存到data，就可以在methods的方法是调用了
          this.userJson = userJson;
-
+        // 请求用户详情
         this.$axios({
             url:"/user/" + userJson.user.id,
             headers : {
@@ -64,6 +67,9 @@ export default {
             // console.log(res);
             const {data} = res.data;
             this.userInfo = data;
+
+            //单独保存nickname给编辑的弹窗使用
+            this.nickname = data.nickname;
         })
     },
     methods:{
@@ -75,6 +81,7 @@ export default {
             //第一个字符串file表示接口属性，第二个是我们获取的对象
             fd.append("file",file.file)
             // console.log(file);
+            // 开始上传
             this.$axios({
                 method:"post",
                 url:"/upload",
@@ -97,20 +104,6 @@ export default {
             })
         },
 
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
         //编辑用户信息的函数
         handleEdit(data){
             this.$axios({
@@ -123,9 +116,20 @@ export default {
                 data:data,
             }).then(res=>{
                 // console.log(res);
-
+                this.$toast.success('修改成功')
             })
+        },
+
+        // 弹出框修改昵称按确定  comfirm事件 触发 修改昵称的方法   （等于确定按钮的点击事件）
+        handleChangeNickname(){
+            // 调用编辑用户信息的函数
+            this.handleEdit({ nickname:this.nickname });
+            //同步修改当前显示的数据
+            // 这个是弹出框按确定触发了 handleChangeNickname 这个方法  这个方法里面又去调用了handleEdit的方法
+            // 然后才把修改后的再传，没有按确定 没有触发上面的函数方法 就不会出现没按确定就影响了
+            this.userInfo.nickname = this.nickname;
         }
+
 
 
     }
