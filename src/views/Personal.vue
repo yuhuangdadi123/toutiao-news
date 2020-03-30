@@ -35,7 +35,8 @@
 
     <Listbar v-for="(item,index) in rows" :key="index"
     :label="item.label"
-    :tips="item.tips">
+    :tips="item.tips"
+    :path="item.path">
     </Listbar>
 
     <!-- handleClick点击退出按钮时候触发 -->
@@ -57,9 +58,9 @@ export default {
     data(){
         return {
             rows: [
-				{ label: "我的关注", tips: "关注的用户" },
-				{ label: "我的跟帖", tips: "跟帖回复" },
-				{ label: "我的收藏", tips: "文章视频" },
+				{ label: "我的关注", tips: "关注的用户" , path:"/follow"},
+				{ label: "我的跟帖", tips: "跟帖回复" , path:"/comments"},
+				{ label: "我的收藏", tips: "文章视频" , path:"/star"},
             ],
             userInfo: {},
  	        moment, 
@@ -89,7 +90,7 @@ export default {
             // console.log(res);
             const {data} = res.data;
              // 赋值给data的userInfo
-             console.log(data);
+            //  console.log(data);
  			this.userInfo = data;
         })
     },

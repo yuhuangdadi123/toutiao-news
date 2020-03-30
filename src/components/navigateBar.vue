@@ -5,8 +5,7 @@
     <strong>{{title}}</strong>
     <!-- $router.push()是实例下的属性，可以直接在模板中渲染 -->
     <span class="iconfont iconshouye" @click="$router.push('/')" 
-    v-if="showHome"
-    ></span>
+    v-if="showHome"></span>
     <span class="iconfont iconshouye" v-else="" style="opacity:0"></span>
   </div>
 </template>

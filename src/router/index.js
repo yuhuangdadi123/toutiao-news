@@ -36,6 +36,21 @@ const routes = [
 		path: "/edit",
 		component: () => import("@/views/Edit")
 	},
+	{
+		// 关注页
+		path: "/follow",
+		component: () => import("@/views/Follow")
+	},
+	{
+		// 跟帖页
+		path: "/comments",
+		component: () => import("@/views/Comments")
+	},
+	{
+		// 收藏页
+		path: "/star",
+		component: () => import("@/views/Star")
+	},
 ]
 
 const router = new VueRouter({

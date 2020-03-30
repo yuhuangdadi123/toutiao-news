@@ -1,7 +1,7 @@
 <template>
   <!-- 列表按钮栏 -->
     <div class="listbar">
-        <router-link to="#">
+        <router-link :to="path || '#'">
             <div>{{label}}</div>
             <div>{{tips}}<span class="iconfont iconjiantou1"></span></div>
         </router-link>
@@ -10,7 +10,7 @@
 
 <script>
 export default {
-    props:['label','tips'],
+    props:['label','tips','path'],
 
 }
 </script>
