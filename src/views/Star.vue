@@ -6,7 +6,7 @@
     <div v-for="(item, index) in stars" :key="index">
 
         <!-- 循环的结构,少于3张图片的布局 -->
-        <div class="star" >
+        <div class="star" v-if="item.cover.length < 3 && item.cover.length > 0">
         <div class="imgtext">
             <h4>{{ item.title }}</h4>
             <p>{{item.user.nickname}}  {{item.comments.length}}跟帖</p>

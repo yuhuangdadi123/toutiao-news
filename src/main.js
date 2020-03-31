@@ -5,7 +5,7 @@ import App from './App.vue'
 // 路由对象
 import router from './router'
 // 引入vant ui组件库
-import Vant from 'vant';
+import Vant , {Toast} from 'vant';
 // 导入axios
 import axios from "axios";
 
@@ -26,7 +26,7 @@ Vue.config.productionTip = false
 // from：代表你即将要离开的页面
 // next：必须要调用，next就类似于你nodejs的中间件，调用才会加载后面的内容
 router.beforeEach((to, from, next) => {
-  if(to.path === "/personal"){
+  if(to.meta.authorization){
     // 判断是否是登录状态，时候有token
     // 如果本地的数据是空会返回null，null是没有token属性，会导致js报错，
     // 所以可以加个判断，如果本地的数据空的，等于空的对象
@@ -44,6 +44,21 @@ router.beforeEach((to, from, next) => {
     next();
   }
 })
+
+// axios的响应拦截器 文档地址：https://github.com/axios/axios#interceptors
+axios.interceptors.response.use(function (res) {
+  return res;
+}, function (error) {
+  // 如果请求返回的结果是错误的，会进入到错误的处理函数中
+	// error是js原生的错误对象，我们可以用过error.response可以获取到详细的信息
+	const {statusCode, message} = error.response.data;
+
+	if(statusCode === 400){
+		Toast.fail(message);
+  }
+  
+  return Promise.reject(error);
+});
 
 
 // 创建一个根实例

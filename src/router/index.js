@@ -9,7 +9,7 @@ const routes = [
 	{	
 		// 路由重定向到登录页
 		path: "/",
-		component: () => import("../views/Login")
+		component: () => import("../views/Index")
 	},
   	{	
 		// 登录页
@@ -19,7 +19,11 @@ const routes = [
 	{	
 		// 注册页
 		path: "/register",
-		component: () => import("@/views/Register")
+		component: () => import("@/views/Register"),
+		meta: {
+			// 代表这个页面需要授权
+			authorization: true
+		}
 	},
 	// {
 	//自己写的个人中心布局
@@ -29,27 +33,47 @@ const routes = [
 	{
 		// 个人中心页
 		path: "/personal",
-		component: () => import("@/views/Personal")
+		component: () => import("@/views/Personal"),
+		meta: {
+			// 代表这个页面需要授权
+			authorization: true
+		}
 	},
 	{
 		// 编辑页
 		path: "/edit",
-		component: () => import("@/views/Edit")
+		component: () => import("@/views/Edit"),
+		meta: {
+			// 代表这个页面需要授权
+			authorization: true
+		}
 	},
 	{
 		// 关注页
 		path: "/follow",
-		component: () => import("@/views/Follow")
+		component: () => import("@/views/Follow"),
+		meta: {
+			// 代表这个页面需要授权
+			authorization: true
+		}
 	},
 	{
 		// 跟帖页
 		path: "/comments",
-		component: () => import("@/views/Comments")
+		component: () => import("@/views/Comments"),
+		meta: {
+			// 代表这个页面需要授权
+			authorization: true
+		}
 	},
 	{
 		// 收藏页
 		path: "/star",
-		component: () => import("@/views/Star")
+		component: () => import("@/views/Star"),
+		meta: {
+			// 代表这个页面需要授权
+			authorization: true
+		}
 	},
 ]
 
