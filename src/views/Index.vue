@@ -23,12 +23,23 @@
         <van-tabs v-model="active" sticky swipeable>
         <van-tab v-for="(item, index) in categories" :title="item" :key="index">
         
-         <!-- 假设list是后台返回的数组，里有10个元素 -->
+             <!-- 下拉刷新 -->
+            <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+                <!-- van的列表组件 -->
+                <!-- @load 滚动到底部时候触发的函数 -->
+                <van-list
+                    v-model="loading"
+                    :finished="finished"
+                    finished-text="没有更多了"
+                    @load="onLoad"
+                >
+                    <!-- 假设list是后台返回的数组，里有10个元素 -->
                     <div v-for="(item, index) in list" :key="index">
                         <!-- 只有单张图片的 -->
                         <PostItem1/> 
                     </div>
-
+                </van-list>
+            </van-pull-refresh>
         </van-tab>
         </van-tabs>
    
@@ -52,6 +63,9 @@ export default {
             '关注','娱乐','体育','汽车','房产','关注','∨'],
             active: 0,
             list: [1,1,1,1,1,1,1,1,1,1], // 10个1
+            loading: false, // 是否正在加载中
+            finished: false, // 是否已经加载完毕
+            refreshing: false , // 是否正在下拉加载
         }
     },
     // 监听属性
@@ -69,6 +83,28 @@ export default {
         PostItem2,
         PostItem3
     },
+    methods:{
+        onLoad() {
+        // 异步更新数据
+        // setTimeout 仅做示例，真实场景中一般为 ajax 请求
+        setTimeout(() => {
+            for (let i = 0; i < 10; i++) {
+            this.list.push(this.list.length + 1);
+            }
+            // 加载状态结束
+            this.loading = false;
+            // 数据全部加载完成
+            if (this.list.length >= 40) {
+                this.finished = true;
+                }
+            }, 5000);
+        },
+        onRefresh() {
+            // 表示加载完毕
+            this.refreshing = false;
+            console.log("正在下拉刷新")
+        }
+    }
 }
 </script>
 
