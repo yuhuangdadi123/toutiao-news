@@ -76,6 +76,8 @@ export default {
             categories: [],
             active: 0,
             list: [], 
+             // 记录当前的栏目的id
+            categoryId: 999,
             loading: false, // 是否正在加载中
             finished: false, // 是否已经加载完毕
             refreshing: false , // 是否正在下拉加载
@@ -139,7 +141,8 @@ export default {
             url: "/post",
             // params就是url问号后面的参数
             params: {
-                category: 999
+                // category: 999
+                category: this.categoryId
             }
         }).then(res => {
             // 文章的数据
@@ -152,6 +155,15 @@ export default {
     },
 
     methods:{
+
+        // 循环给栏目加上pageIndex，每个栏目都是自己的pageIndex
+        handleCategories(){
+            this.categories = this.categories.map(v => {
+                v.pageIndex = 1;
+                return v;
+            })
+        },
+
         // 获取栏目数据, 如果有token加上到头信息。没有就不加
          getCategories(token){
             const config = { url: "/category" }
@@ -172,6 +184,8 @@ export default {
                 this.categories = data;
                 // 把菜单的数据保存到本地
                 localStorage.setItem("categories", JSON.stringify(data));
+                // 给每个栏目都加上pageIndex = 1
+                this.handleCategories();
             })
          },
 
