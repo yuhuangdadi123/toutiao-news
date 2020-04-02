@@ -27,28 +27,30 @@
             <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
                 <!-- van的列表组件 -->
                 <!-- @load 滚动到底部时候触发的函数 -->
+                <!-- immediate-check 这个属性可以阻止list组件默认就加载一次 -->
                 <van-list
-                    v-model="loading"
-                    :finished="finished"
+                    :immediate-check="false"
+                    v-model="categories[active].loading"
+                    :finished="categories[active].finished"
                     finished-text="没有更多了"
                     @load="onLoad"
                 >
                     <!-- 假设list是后台返回的数组，里有10个元素 -->
-                    <div v-for="(item, index) in list" :key="index">
-                        <!-- 只有单张图片的 -->
-                        <PostItem1 
-                        v-if="item.type === 1 && item.cover.length > 0 && item.cover.length < 3"
-                        :data="item"/>
+                    <div v-for="(item, index) in categories[active].posts" :key="index">
+                            <!-- 只有单张图片的 -->
+                            <PostItem1 
+                            v-if="item.type === 1 && item.cover.length > 0 && item.cover.length < 3"
+                            :data="item"/>
 
-                        <!-- 大于等于3张图片 -->
-                        <PostItem2 
-                        v-if="item.type === 1 && item.cover.length >= 3"
-                        :data="item"/>
+                            <!-- 大于等于3张图片 -->
+                            <PostItem2 
+                            v-if="item.type === 1 && item.cover.length >= 3"
+                            :data="item"/>
 
-                        <!-- 视频 -->
-                        <PostItem3 
-                        v-if="item.type === 2"
-                        :data="item"/> 
+                            <!-- 视频 -->
+                            <PostItem3 
+                            v-if="item.type === 2"
+                            :data="item"/>
                     </div>
                 </van-list>
             </van-pull-refresh>
@@ -73,13 +75,13 @@ export default {
         return{
             // categories:['关注','娱乐','体育','汽车','房产',
             // '关注','娱乐','体育','汽车','房产','关注','∨'],
-            categories: [],
+            categories: [], //栏目列表
             active: 0,
-            list: [], 
+            //list: [], //文章列表
              // 记录当前的栏目的id
             categoryId: 999,
-            loading: false, // 是否正在加载中
-            finished: false, // 是否已经加载完毕
+            //loading: false, // 是否正在加载中
+            //finished: false, // 是否已经加载完毕
             refreshing: false , // 是否正在下拉加载
         }
     },
@@ -90,7 +92,10 @@ export default {
             // 判断如果点击的是最后一个图标，跳转到栏目管理页
             if(this.active === this.categories.length - 1){
                 this.$router.push("/栏目管理")
+                return;
             }
+             // 请求不同的栏目的数据
+            this.getList();
         }
     },
     components: {
@@ -119,52 +124,50 @@ export default {
                 return;
             }
             this.categories = categories;
+             // 给每个栏目都加上pageIndex = 1
+            this.handleCategories();
         }else{
-            // 没有本地的数据才去请求栏目接口
-            this.$axios({
-                url:"/category"
-            }).then(res=>{
-                // console.log(res);
-                // data就是数组
-                const {data} = res.data;
-                data.push({
-                    name: "∨"
-                })
-                this.categories = data;
-                // 把菜单的数据保存到本地
-                localStorage.setItem("categories", JSON.stringify(data));
-            })
+            this.getCategories(token);
         }
 
-        // 请求文章列表，页面一开始都是请求头条栏目下的文章，头条栏目的id是999
+        // 请求文章列表，页面一开始都是请求头条栏目下的文章，头条栏目的id是999 ！！！！！！！！！！！！！！
         this.$axios({
             url: "/post",
             // params就是url问号后面的参数
             params: {
                 // category: 999
-                category: this.categoryId
+                category: this.categoryId,
+                pageIndex: 1,
+                pageSize: 5,
             }
         }).then(res => {
+            console.log(res);
             // 文章的数据
             const {data} = res.data;
             // 保存到data的list中
-            this.list = data;
+            // this.list = data;
+            // 如果是修改数组中某一项的属性，不会驱动视图的更新的
+            this.categories[this.active].posts = data;
+            // 赋值的方式可以引起模板的刷新
+            this.categories = [...this.categories];
         })
 
 
     },
 
     methods:{
-
         // 循环给栏目加上pageIndex，每个栏目都是自己的pageIndex
         handleCategories(){
             this.categories = this.categories.map(v => {
                 v.pageIndex = 1;
+                v.posts = [];
+                v.loading = false;
+                v.finished = false;
                 return v;
             })
         },
 
-        // 获取栏目数据, 如果有token加上到头信息。没有就不加
+        // 获取栏目数据, 如果有token加上到头信息。没有就不加！！！！！！！！！！！！！！！！！！！！！！
          getCategories(token){
             const config = { url: "/category" }
             // 如果有token，把token添加到头信息中
@@ -173,7 +176,7 @@ export default {
             if(token){
                 config.headers = { Authorization: token };
             }
-            // 没有本地的数据才去请求栏目接口
+            // 没有本地的数据才去请求栏目接口!!!!!!!!!!!!!!!!!!!
             this.$axios(config).then(res => {
                 // 菜单的数据
                 const {data} = res.data;
@@ -190,26 +193,55 @@ export default {
          },
 
         onLoad() {
-        // 异步更新数据
-        // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-        setTimeout(() => {
-            for (let i = 0; i < 10; i++) {
-            this.list.push(this.list.length + 1);
-            }
-            // 加载状态结束
-            this.loading = false;
-            // 数据全部加载完成
-            if (this.list.length >= 40) {
-                this.finished = true;
+            // 当前栏目下pageIndex加1
+            this.categories[this.active].pageIndex += 1;
+
+            // 请求文章列表
+            this.getList();
+            },
+
+            getList(){
+                // 如果当前的栏目数据已经加载完毕了，直接return；
+                if(this.categories[this.active].finished){
+                    return;
                 }
-            }, 5000);
-        },
+                const {pageIndex, id} = this.categories[this.active];
+
+                // 加载下一页的数据
+                this.$axios({
+                url: "/post",
+                params: {
+                    // pageIndex: this.categories[this.active].pageIndex,
+                    pageIndex: pageIndex,
+                    pageSize: 5,
+                    // category: this.categoryId,
+                    category: id
+                    }
+                }).then(res => {
+                    // console.log(res);  total 总共有多少条
+                    const {data, total} = res.data;
+                    // 把新的文章数据合并到原来的文章列表中
+                    // this.list = [...this.list, ...data];
+                    this.categories[this.active].posts = [...this.categories[this.active].posts, ...data]; 
+                    // 加载状态结束
+                    // this.loading = false;
+                    this.categories[this.active].loading = false;
+                    // 赋值的方式页面才会更新
+                    this.categories=[...this.categories];
+                    // 是否是最后一页
+                    if(this.categories[this.active].posts.length === total){
+                            // 当前栏目的文章已经加载完毕
+                            this.categories[this.active].finished = true;
+                        }
+                    })
+                },
+
         onRefresh() {
             // 表示加载完毕
             this.refreshing = false;
             console.log("正在下拉刷新")
+            }
         }
-    }
 }
 </script>
 
