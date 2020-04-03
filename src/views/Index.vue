@@ -112,20 +112,19 @@ export default {
         // 如果本地有数据，获取本地的数据来渲染
         if(categories){
             // 登录了(有token)但是第一条不是关注
-            if(categories[0].name !== "关注" && token){
+            // 登录了(有token)但是第一条不是关注
+            if(categories[0].name !== "关注" && token || categories[0].name === "关注" && !token){
                 // 获取栏目数据
                 this.getCategories(token);
                 return;
             }
-            // 登录了(有token)但是第一条不是关注
-            if(categories[0].name === "关注" && !token){
-                // 获取栏目数据
-                this.getCategories();
-                return;
-            }
+            else{
             this.categories = categories;
              // 给每个栏目都加上pageIndex = 1
             this.handleCategories();
+            }
+            
+            
         }else{
             this.getCategories(token);
         }
@@ -212,10 +211,10 @@ export default {
                 url: "/post",
                 params: {
                     // pageIndex: this.categories[this.active].pageIndex,
+                    category: id,
                     pageIndex: pageIndex,
                     pageSize: 5,
                     // category: this.categoryId,
-                    category: id
                     }
                 }).then(res => {
                     // console.log(res);  total 总共有多少条

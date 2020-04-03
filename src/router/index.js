@@ -9,7 +9,7 @@ const routes = [
 	{	
 		// 路由重定向到登录页
 		path: "/",
-		component: () => import("../views/Index")
+		component: () => import("../views/index1")
 	},
   	{	
 		// 登录页
