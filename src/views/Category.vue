@@ -60,6 +60,21 @@ mounted(){
     })
 },
 
+// 页面销毁时候触发的事件
+destroyed(){
+    // 把栏目上数组 下数组 保存到本地数组
+    //上面是通过过筛的方法获取新数组 不会改变原来的数组，‘V’符号就还在，可以通过下面的方法拿到
+    //再通过...的方法 组建成新栏目
+    this.categories=[
+        ...this.arrUp,
+        ...this.arrDown,
+        this.categories[this.categories.length-1]
+    ];
+    //再把新栏目数组保存到 本地存储
+    // 本地存储的名字继续叫categories
+    localStorage.setItem('categories',JSON.stringify(this.categories));
+},
+
 methods:{
     // 封装一个点击删除栏目的方法
     handDel(item,index){
@@ -82,9 +97,6 @@ methods:{
         // 再把它添加到下面的数组
         this.arrUp.push(item);
     },
-
-
-
 
 },
 
