@@ -11,6 +11,7 @@
         v-for="(item,index) in arrUp"
         :key="index"
         :class="['关注','头条'].includes(item.name)?`active`:``"
+        @click="handDel(item,index)"
         >{{item.name}}</span>
       </div>
       
@@ -55,7 +56,26 @@ mounted(){
     this.arrDown = this.categories.filter(v=>{
         return v.is_top === 0;
     })
-}
+},
+
+methods:{
+    // 封装一个点击删除栏目的方法
+    handDel(item,index){
+        // 头条跟关注不能删  点到他们 直接跳出这个函数 无效
+        if(item.name === "关注" || item.name === "头条") return;
+        // 把当前这项从arrUp数组中删除掉
+        this.arrUp.splice(index,1);
+        // 把他的is_top 由 1 改成 0
+        item.is_top = 0; 
+        // 再把它添加到下面的数组
+        this.arrDown.push(item);
+    },
+
+
+
+
+
+},
 
 };
 </script>
