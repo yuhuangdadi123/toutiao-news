@@ -28,6 +28,21 @@
             </div>
         </div>
 
+        <!-- 搜索结果的浮层 -->
+        <div class="result-layer">
+            <div class="result-item">
+                <p>搜索结果的浮层搜索结果的浮层搜索结果的浮层搜索结果的浮层搜索结果的浮层搜索结果的浮层</p>
+                <span class="iconfont iconjiantou1"></span>
+            </div>
+            <div class="result-item">
+                <p>搜索结果的浮层搜索结果的浮层</p>
+                <span class="iconfont iconjiantou1"></span>
+            </div>
+            <div class="result-item">
+                <p>搜索结果的浮层搜索结果的浮层</p>
+                <span class="iconfont iconjiantou1"></span>
+            </div>
+        </div>
   </div>
 </template>
 
@@ -86,5 +101,35 @@ export default {
     }
 }
 
+.result-layer{
+    position: absolute;
+    font-size: .5rem;
+    top: 1.666667rem;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    overflow: hidden;
+    padding: .555556rem;
+    box-sizing: border-box;
+    .result-item{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: .277778rem;
+        border-bottom:1px #eee solid;
+
+        p{
+            flex: 1;
+            margin-right: .277778rem;
+            overflow: hidden;
+            text-overflow:ellipsis;
+            white-space: nowrap;
+        }
+        span{
+            color: #999;
+        }
+    }
+}
 
 </style>
