@@ -19,7 +19,9 @@
       <div class="list">
         <span class="item"
             v-for="(item, index) in arrDown" 
-            :key="index">
+            :key="index"
+            @click="handAdd(item,index)"
+            >
             {{item.name}}
             </span>
       </div>
@@ -71,6 +73,15 @@ methods:{
         this.arrDown.push(item);
     },
 
+    // 封装一个点击添加栏目的方法
+    handAdd(item,index){   
+        // 把当前这项从arrDown数组中删除掉
+        this.arrDown.splice(index,1);
+        // 把他的is_top 由 0 改成 1
+        item.is_top = 1; 
+        // 再把它添加到下面的数组
+        this.arrUp.push(item);
+    },
 
 
 
