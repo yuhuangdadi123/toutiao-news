@@ -22,8 +22,11 @@
                 <!-- X号 清除历史记录 -->
                 <span class="iconfont iconicon-test"  @click="handleClear"></span>
             </div>
+            <!-- 历史记录的列表 -->
             <div class="record-list">
-                <span class="record-item" v-for="(item, index) in history" :key="index">{{item}}</span>
+                <span class="record-item" v-for="(item, index) in history" :key="index"
+                @click="handleRecord(item)"
+                >{{item}}</span>
             </div>
         </div>
 
@@ -72,6 +75,11 @@ export default {
         handleClear(){
             this.history = [];
             localStorage.removeItem('history');
+        },
+
+        //封装一个点击历史记录就能直接查询的方法
+        handleRecord(item){
+            this.value = item;
         }
 
     },
