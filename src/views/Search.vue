@@ -42,6 +42,9 @@
                 <!-- 视频 -->
                 <PostItem3 :data="item" v-if="item.type === 2"/>
             </div>
+            <div class="empty" v-if="list.length === 0">
+                没有找到你想要的内容
+            </div>
         </div>
   </div>
 </template>
@@ -64,6 +67,18 @@ export default {
             showLayer: false,
             // 文章列表
             list: [],
+        }
+    },
+
+    watch:{
+        value(){
+             // 如果值的空的
+            if(this.value == ""){
+            // 清空文章列表
+            this.list = [];
+            // 且隐藏浮层
+            this.showLayer = false;
+            }
         }
     },
 
@@ -205,6 +220,12 @@ export default {
             color: #999;
         }
     }
+}
+
+.empty{
+    text-align: center;
+    color: #999;
+    line-height: 2;
 }
 
 </style>
