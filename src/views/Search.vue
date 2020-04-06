@@ -6,10 +6,12 @@
           <!-- 中间搜索框部分 -->
           <div class="search">
               <span class="iconfont iconsearch"></span>
-              <input placeholder="请输入搜索关键字"/>
+              <!-- keyup.enter是键盘事件，keyup就是原生的onkeyup，enter就是确认键 -->
+                <!-- autofocus打开页面 自动聚焦到input -->
+              <input placeholder="请输入搜索关键字" autofocus v-model="value"  @keyup.enter="handleSearch"/>
           </div>
           <!-- 搜索按钮 -->
-          <span class="search-btn">搜索</span>
+          <span class="search-btn" @click="handleSearch">搜索</span>
         </div>
     
         <!-- 历史记录 -->
@@ -19,17 +21,12 @@
                 <span class="iconfont iconicon-test"></span>
             </div>
             <div class="record-list">
-                <span class="record-item">美女</span>
-                <span class="record-item">美女美女美女美女</span>
-                <span class="record-item">美女美女</span>
-                <span class="record-item">美女美</span>
-                <span class="record-item">美</span>
-                <span class="record-item">美女美女美女美</span>
+                <span class="record-item" v-for="(item, index) in history" :key="index">{{item}}</span>
             </div>
         </div>
 
         <!-- 搜索结果的浮层 -->
-        <div class="result-layer">
+        <div class="result-layer" v-if="false">
             <div class="result-item">
                 <p>搜索结果的浮层搜索结果的浮层搜索结果的浮层搜索结果的浮层搜索结果的浮层搜索结果的浮层</p>
                 <span class="iconfont iconjiantou1"></span>
@@ -48,6 +45,34 @@
 
 <script>
 export default {
+    data(){
+        return {
+            value:'',
+            // 历史记录,先获取本地的搜索记录，如果没有就是等于一个空数组
+            history:JSON.parse(localStorage.getItem('history')) || [],
+        }
+    },
+
+    methods:{
+        // 封装一个点击搜索事件
+        handleSearch(){
+            if(this.value == '') return;
+            // 把当前搜索的内容添加到历史记录的数组里面去
+            this.history.unshift(this.value);
+            // 数组去除重复
+            const arrnew = new Set(this.history); //获取的是一个对象 所以要解构
+            this.history = [...arrnew];
+            // 把搜索的内容添加到本地
+            localStorage.setItem("history",JSON.stringify(this.history))
+        }
+
+    },
+
+
+
+
+
+
 
 }
 </script>
