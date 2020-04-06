@@ -3,7 +3,7 @@
     <!-- 头部 -->
     <div class="header">
       <div class="left">
-        <span class="iconfont iconjiantou2"></span>
+        <span class="iconfont iconjiantou2" @click="$router.back()"></span>
         <span class="iconfont iconnew"></span>
       </div>
       <!-- active表示红色的 -->
@@ -59,7 +59,10 @@ import moment from "moment";
 export default {
   data() {
     return {
-      post: {},
+      post: {
+        // 为什么要加这个默认值，因为模板需要访问post.user.nickname
+        user: {}
+        },
       moment,
     };
   },
