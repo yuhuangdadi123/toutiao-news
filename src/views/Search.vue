@@ -8,7 +8,8 @@
               <span class="iconfont iconsearch"></span>
               <!-- keyup.enter是键盘事件，keyup就是原生的onkeyup，enter就是确认键 -->
                 <!-- autofocus打开页面 自动聚焦到input -->
-              <input placeholder="请输入搜索关键字" autofocus v-model="value"  @keyup.enter="handleSearch"/>
+              <input placeholder="请输入搜索关键字" autofocus 
+              v-model="value"  @keyup.enter="handleSearch"/>
           </div>
           <!-- 搜索按钮 -->
           <span class="search-btn" @click="handleSearch">搜索</span>
@@ -18,7 +19,8 @@
         <div class="record">
             <div class="title">
                 <strong>历史记录</strong>
-                <span class="iconfont iconicon-test"></span>
+                <!-- X号 清除历史记录 -->
+                <span class="iconfont iconicon-test"  @click="handleClear"></span>
             </div>
             <div class="record-list">
                 <span class="record-item" v-for="(item, index) in history" :key="index">{{item}}</span>
@@ -64,6 +66,12 @@ export default {
             this.history = [...arrnew];
             // 把搜索的内容添加到本地
             localStorage.setItem("history",JSON.stringify(this.history))
+        },
+
+        // 封装一个清除历史记录的方法
+        handleClear(){
+            this.history = [];
+            localStorage.removeItem('history');
         }
 
     },
