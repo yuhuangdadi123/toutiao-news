@@ -8,7 +8,8 @@
       </div>
       <!-- active表示红色的 -->
       <!-- 如果关注是false，就加上active这个class，显示一个红色按钮 -->
-      <span class="follow" :class="post.has_follow ? '' : 'active'">
+      <span class="follow" :class="post.has_follow ? '' : 'active'" 
+      @click="handleFollow">
         {{ post.has_follow ? "已关注" : "关注" }}
       </span>
     </div>
@@ -77,8 +78,33 @@ export default {
       this.post = data;
     });
   },
+
+    methods:{
+        // 关注的方法
+        handleFollow(){
+            if(this.post.has_follow)return;
+            // 本地的token
+            const {token} = JSON.parse(localStorage.getItem("userInfo")) || {};
+            this.$axios({
+                url: '/user_follows/' + this.post.user.id,
+                headers: {
+                    Authorization: token
+                }
+            }).then(res => {
+                // 关注成功之后修改关注状态
+                this.post.has_follow = true;
+                this.$toast.success("关注成功")
+            })
+        }
+    },
+
 };
+
 </script>
+
+
+
+
 
 <style scoped lang="less">
 .main{
