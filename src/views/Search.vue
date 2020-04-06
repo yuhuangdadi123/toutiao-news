@@ -2,7 +2,7 @@
   <div>
         <!-- 头部 -->
         <div class="header">
-          <span class="iconfont iconjiantou2"></span>
+          <span class="iconfont iconjiantou2" @click="$router.back()"></span>
           <!-- 中间搜索框部分 -->
           <div class="search">
               <span class="iconfont iconsearch"></span>
@@ -31,31 +31,46 @@
         </div>
 
         <!-- 搜索结果的浮层 -->
-        <div class="result-layer" v-if="false">
-            <div class="result-item">
-                <p>搜索结果的浮层搜索结果的浮层搜索结果的浮层搜索结果的浮层搜索结果的浮层搜索结果的浮层</p>
-                <span class="iconfont iconjiantou1"></span>
-            </div>
-            <div class="result-item">
-                <p>搜索结果的浮层搜索结果的浮层</p>
-                <span class="iconfont iconjiantou1"></span>
-            </div>
-            <div class="result-item">
-                <p>搜索结果的浮层搜索结果的浮层</p>
-                <span class="iconfont iconjiantou1"></span>
+        <div class="result-layer" v-if="showLayer">
+            <div class="result-item" v-for="(item,index) in list" :key="index" >
+                <!-- <p>{{item.title}}</p>
+                <span class="iconfont iconjiantou1"></span> -->
+                <!-- 只有单张图片的 -->
+                <PostItem1 :data="item" v-if="item.type === 1 && item.cover.length < 3"/> 
+                <!-- 大于等于3张图片 -->
+                <PostItem2 :data="item" v-if="item.type === 1 && item.cover.length >= 3"/> 
+                <!-- 视频 -->
+                <PostItem3 :data="item" v-if="item.type === 2"/>
             </div>
         </div>
   </div>
 </template>
 
 <script>
+// 文章列表的组件,只有单张图片的
+import PostItem1 from "@/components/PostItem1"
+// 大于等于3张图片的组件
+import PostItem2 from "@/components/PostItem2"
+// 视频的列表组件
+import PostItem3 from "@/components/PostItem3"
+
 export default {
     data(){
         return {
             value:'',
             // 历史记录,先获取本地的搜索记录，如果没有就是等于一个空数组
             history:JSON.parse(localStorage.getItem('history')) || [],
+            // 是否展示浮层
+            showLayer: false,
+            // 文章列表
+            list: [],
         }
+    },
+
+    components: {
+        PostItem1,
+        PostItem2,
+        PostItem3
     },
 
     methods:{
@@ -69,6 +84,8 @@ export default {
             this.history = [...arrnew];
             // 把搜索的内容添加到本地
             localStorage.setItem("history",JSON.stringify(this.history))
+            // 根据输入的内容搜索文章
+            this.getList();
         },
 
         // 封装一个清除历史记录的方法
@@ -80,15 +97,31 @@ export default {
         //封装一个点击历史记录就能直接查询的方法
         handleRecord(item){
             this.value = item;
+            // 根据输入的内容搜索文章
+            this.getList();
+        },
+
+        // 封装一个搜索文章的方法
+        getList(){
+            this.$axios({
+                url:"/post_search",
+                params:{
+                    keyword: this.value
+                }
+            }).then(res=>{
+                // console.log(res);
+                // 让浮层弹出
+                this.showLayer = true;
+                // 解构出文章列表
+                const {data} = res.data;
+                // 把文章列表保存到本地
+                this.list = data;
+            })
         }
 
+
+
     },
-
-
-
-
-
-
 
 }
 </script>
@@ -100,6 +133,7 @@ export default {
     font-size: .5rem;
     justify-content: space-between;
     align-items: center;
+    border-bottom: .027778rem solid #eee;
 
     .search{
         flex: 1;
@@ -151,7 +185,7 @@ export default {
     width: 100%;
     background-color: #fff;
     overflow: hidden;
-    padding: .555556rem;
+    padding: .555556rem 0;
     box-sizing: border-box;
     .result-item{
         display: flex;
