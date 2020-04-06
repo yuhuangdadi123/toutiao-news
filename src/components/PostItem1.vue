@@ -1,5 +1,6 @@
 <template>
     <div>
+        <router-link :to="`/post/${data.id}`">
         <!-- 循环的结构,少于3张图片的布局 -->
         <div class="imgText">
             <div class="imgText-left">
@@ -8,6 +9,7 @@
             </div>
              <img :src="$axios.defaults.baseURL + data.cover[0].url" />
         </div>
+        </router-link>
     </div>
 </template>
 

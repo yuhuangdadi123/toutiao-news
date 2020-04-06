@@ -84,6 +84,11 @@ const routes = [
 		// 搜索页
 		path: "/search",
 		component: () => import("@/views/Search")
+	},
+	{
+		// 文章详情页
+		path: "/post/:id",
+		component: () => import("@/views/Post")
 	}
 ]
 
