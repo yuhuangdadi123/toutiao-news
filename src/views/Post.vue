@@ -91,18 +91,25 @@ export default {
     methods:{
         // 关注的方法
         handleFollow(){
-            if(this.post.has_follow)return;
-            // 本地的token
-            const {token} = JSON.parse(localStorage.getItem("userInfo")) || {};
+            // if(this.post.has_follow)return;
+            let url = ""
+            if(this.post.has_follow){
+              //取消关注
+              url = "/user_unfollow/" + this.post.user.id
+            }else{
+              //关注
+              url = '/user_follows/' + this.post.user.id
+            }
+
             this.$axios({
-                url: '/user_follows/' + this.post.user.id,
+                url,
                 headers: {
-                    Authorization: token
+                    Authorization: this.token
                 }
             }).then(res => {
                 // 关注成功之后修改关注状态
-                this.post.has_follow = true;
-                this.$toast.success("关注成功")
+                this.post.has_follow = !this.post.has_follow;
+                this.$toast.success(this.post.has_follow ? "关注成功" : '取消关注成功')
             })
         }
     },
