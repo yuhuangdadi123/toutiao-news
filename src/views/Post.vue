@@ -65,13 +65,22 @@ export default {
         user: {}
         },
       moment,
+      token:'',
     };
   },
   mounted() {
-    // 请求文章详情
-    this.$axios({
+    const {token} = JSON.parse(localStorage.getItem('userInfo'));
+    this.token = token;
+    const config = {
       url: "/post/" + this.$route.params.id,
-    }).then((res) => {
+    }
+    if(token){
+      config.headers = {
+        Authorization:token
+      }
+    }
+    // 请求文章详情
+    this.$axios(config).then((res) => {
       // console.log(res);
       // data是文章的详情
       const { data } = res.data;
