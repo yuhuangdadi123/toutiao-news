@@ -34,7 +34,6 @@
                         finished-text="我也是有底线的"
                         @load="onLoad"
                     >
-
                         <!-- 假设list是后台返回的数组，里有10个元素 -->
                         <div v-for="(subItem, subIndex) in item.list" :key="subIndex">
                             <!-- 只有单张图片的 -->
