@@ -42,7 +42,7 @@
       <!-- 如果当前是收藏的状态显示一个红色的按钮 -->
       <div class="icons">
         <!-- 如果当前是收藏的，就添加active这个class，显示一个红色的按钮 -->
-        <span class="iconfont iconshoucang" 
+        <span class="iconfont iconshoucang"  @click="handleStar"
         :class="post.has_star ? `active`: ''"></span>
       </div>
       <!-- 这个按钮是一个装饰用的，微信分享需要企业的资质 -->
@@ -134,7 +134,22 @@ export default {
             this.$toast.success(res.data.message);
           })
         },
-    
+
+        // 收藏
+        handleStar(){
+          this.$axios({
+            url:"/post_star/" + this.post.id,
+            headers: {
+              Authorization: this.token
+            }
+          }).then(res=>{
+            // 收藏状态取反
+            this.post.has_star = !this.post.has_star;
+            // 弹窗提示
+            this.$toast.success(res.data.message);
+          })
+        }
+
     },
 
 };
