@@ -34,28 +34,16 @@
       </div>
     </div>
 
-    <!-- 固定在底部的底部栏 -->
-    <div class="footer">
-      <!-- 点击跳转到评论页 -->
-      <div class="comment-input">发布评论</div>
-      <van-icon name="chat-o" :badge="post.comment_length > 100 ? `99+` : post.comment_length" />
-      <!-- 如果当前是收藏的状态显示一个红色的按钮 -->
-      <div class="icons">
-        <!-- 如果当前是收藏的，就添加active这个class，显示一个红色的按钮 -->
-        <span class="iconfont iconshoucang"  @click="handleStar"
-        :class="post.has_star ? `active`: ''"></span>
-      </div>
-      <!-- 这个按钮是一个装饰用的，微信分享需要企业的资质 -->
-      <div class="icons">
-        <span class="iconfont iconfenxiang"></span>
-      </div>
-    </div>
+    <!-- 底部栏组件 -->
+      <PostFooter :post="post"/>
   </div>
 </template>
 
 <script>
 // 时间转换工具库
 import moment from "moment";
+// 导入底部栏组件
+import PostFooter from "@/components/PostFooter";
 
 export default {
   data() {
@@ -68,6 +56,9 @@ export default {
       token:'',
     };
   },
+  components: {
+        PostFooter
+    },
   mounted() {
     const {token} = JSON.parse(localStorage.getItem('userInfo'));
     this.token = token;
@@ -135,20 +126,20 @@ export default {
           })
         },
 
-        // 收藏
-        handleStar(){
-          this.$axios({
-            url:"/post_star/" + this.post.id,
-            headers: {
-              Authorization: this.token
-            }
-          }).then(res=>{
-            // 收藏状态取反
-            this.post.has_star = !this.post.has_star;
-            // 弹窗提示
-            this.$toast.success(res.data.message);
-          })
-        }
+        // // 收藏
+        // handleStar(){
+        //   this.$axios({
+        //     url:"/post_star/" + this.post.id,
+        //     headers: {
+        //       Authorization: this.token
+        //     }
+        //   }).then(res=>{
+        //     // 收藏状态取反
+        //     this.post.has_star = !this.post.has_star;
+        //     // 弹窗提示
+        //     this.$toast.success(res.data.message);
+        //   })
+        // }
 
     },
 

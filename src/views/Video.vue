@@ -1,5 +1,6 @@
 <template>
     <div>
+        <span class="iconfont iconjiantou2" @click="$router.back()"></span>
         <video 
         v-if="post.content"
         :poster="$axios.defaults.baseURL + post.cover[0].url"
@@ -37,11 +38,18 @@
                     <i>微信</i>
                 </div>
             </div>
+
+             <!-- 底部栏组件 -->
+            <PostFooter :post="post"/>
+
         </div>
     </div>
 </template>
 
 <script>
+// 导入底部栏组件
+import PostFooter from "@/components/PostFooter";
+
 export default {
     data(){
         return {
@@ -52,6 +60,9 @@ export default {
             },
             token :''
         }
+    },
+    components: {
+        PostFooter
     },
     mounted(){
         // 获取文章的id
@@ -139,6 +150,15 @@ export default {
 </script>
 
 <style scoped lang="less">
+.iconjiantou2{
+    font-size: .694444rem;
+    position: absolute;
+    top: .277778rem;
+    left: .277778rem;
+    font-weight: 700;
+    z-index: 1;
+}
+
 .video{
     width: 100%;
     display: block;
