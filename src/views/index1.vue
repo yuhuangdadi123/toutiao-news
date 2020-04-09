@@ -102,6 +102,9 @@ export default {
         PostItem3
     },
 
+     // activated只对keep-alive的组件有用，当组件每次被渲染时候才会执行
+    // 和mounted不一样，mounded只会执行一次
+    // activated(){}
     mounted(){
         // 本地的栏目数据
         const categories = JSON.parse(localStorage.getItem('categories'))
@@ -127,7 +130,17 @@ export default {
         }
 
     },
-
+    beforeRouteEnter (to, from, next) {
+        // 如果是来自栏目管理页
+        if(from.path == "/category"){
+        // vm就是this
+            next(vm => {
+                vm.active = 0;
+            })
+        }else{
+            next();
+        }
+    },
     methods: {
         // 循环处理栏目的数据
         handleCategories(){
