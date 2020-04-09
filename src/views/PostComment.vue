@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <!-- 头部导航组件 -->
     <NavigateBar title="精彩跟帖"/>
 
@@ -33,6 +33,28 @@
             </div>
     </div>
     </van-list>
+
+     <!-- 发布评论的底部 -->
+        <div class="publish">
+            <!-- 输入框，点击和没点击时候显示的效果是不一样的 -->
+            <!-- 如果输入框获得焦点的话：
+            1.需要显示出发布按钮，
+            2.需要去掉输入框的自适应高度，
+            3.需要添加active这个class -->
+            <van-field
+                v-model="message"
+                :rows="rows"
+                :autosize="!isFocus"
+                type="textarea"
+                placeholder="说点什么..."
+                class="textarea"
+                :class="isFocus ? `ative` : ``"
+                @focus="handleFocus"
+                @blur="handleBlur"
+                />
+
+            <span class="submit" v-if="isFocus">发布</span>
+        </div>
 
 
   </div>
@@ -114,6 +136,10 @@ methods:{
 </script>
 
 <style scoped lang="less">
+.container{
+    padding-bottom: 60/360*100vw;
+}
+
 .comment{
     
     padding: 15/360*100vw;
@@ -147,4 +173,18 @@ methods:{
     margin-top: 10/360*100vw;
 }
 
+.publish{
+    position: fixed;
+    width: 100%;
+    left:0;
+    bottom:0;
+    padding: 5/360*100vw 15/360*100vw;
+    box-sizing: border-box;
+    background: #fff;
+    .textarea{
+        background: #eee;
+        border-radius: 50px;
+        padding: 5px 20px;
+    }
+}
 </style>
