@@ -3,6 +3,13 @@
     <!-- 头部导航组件 -->
     <NavigateBar title="精彩跟帖"/>
 
+    <!-- 分页组件 -->
+    <!-- v-model：是否正在加载中
+    finished：数据是否加载完成
+    @load：滚动到底部时候触发的事件 -->
+    <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad"
+    :immediate-check="false">
+
     <!-- 跟帖评论列表,评论的最外层, 第一级 -->
         <div class="comment" v-for="(item, index) in list" :key="index">
             <div class="comment-top">
@@ -21,11 +28,12 @@
             item.parent有多少层数据，CommentFloor就自调用多少次 -->
             <CommentFloor v-if="item.parent" :data="item.parent"/>
 
-
             <div class="content">
              {{item.content}}
             </div>
     </div>
+    </van-list>
+
 
   </div>
 </template>
@@ -47,6 +55,14 @@ data(){
         // 评论列表
         list:[],
         moment,
+         // 是否正在加载中
+        loading: false,
+        // 数据是否加载完毕
+        finished: false,
+        // 请求的页数
+        pageIndex: 1,
+        // 请求的条数
+        pageSize: 5,
     }
 },
 
@@ -65,15 +81,33 @@ mounted(){
 methods:{
     getList(){
         this.$axios({
-            url:`/post_comment/${this.pid}`
+            url:`/post_comment/${this.pid}`,
+            params: {
+                    pageIndex: this.pageIndex,
+                    pageSize: this.pageSize
+                }
         }).then(res=>{
             // console.log(res);
             // data是评论的列表数组
             const {data} = res.data;
             // 保存到data的list
-            this.list = data;
+            this.list = [...this.list,...data]
+            // 请求完毕后，页数需要加1
+            this.pageIndex += 1;
+            // 初始化分页相关的值, 告诉van-list组件请求完毕
+            this.loading = false;
+            // 数据已经全部完毕
+            if(data.length < this.pageSize){
+                this.finished = true;
+            }
         })
-    }
+    },
+
+    // 滚动到底部触发的事件
+    onLoad(){
+        this.getList();
+    },
+
 },
 
 }
