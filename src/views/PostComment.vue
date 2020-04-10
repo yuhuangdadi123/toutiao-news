@@ -21,7 +21,7 @@
                         <span>{{moment(item.create_date).fromNow()}}</span>
                     </div>
                 </div>
-                <span class="reply">回复</span>
+                <span class="reply" @click="handleReply(item)">回复</span>
             </div>
 
             <!-- 回复的列表，调用递归的组件, 第二级
@@ -46,11 +46,12 @@
                 :rows="rows"
                 :autosize="!isFocus"
                 type="textarea"
-                placeholder="说点什么..."
+                :placeholder="reply.user ? `回复：@` + reply.user.nickname : `说点什么...`"
                 class="textarea"
                 :class="isFocus ? `ative` : ``"
                 @focus="handleFocus"
                 @blur="handleBlur"
+                ref="textarea"
                 />
 
             <span class="submit" v-if="isFocus" @click="handleSubmit">发布</span>
@@ -90,7 +91,9 @@ data(){
         // 发布评论输入框的行数
         rows: 1,
         // 几率当前的输入框是否获得焦点
-        isFocus: false
+        isFocus: false,
+        // 回复评论的对象
+        reply: {},
     }
 },
 
@@ -145,6 +148,10 @@ methods:{
         // 失去焦点时候，不要立马就隐藏发布按钮，需要在按钮点击之后再隐藏
         setTimeout(() => {
             this.isFocus = false;
+            // 失去焦点时候如果输入框的值是空的，就把回复的人清空
+            if(this.message.trim() === ""){
+                this.reply = {};
+            }
         }, 100)
     },
      // 发布评论
@@ -155,6 +162,15 @@ methods:{
         }
         // 用户能够看到发布的按钮，说明当前肯定是一个登陆的状态
         const {token} = JSON.parse(localStorage.getItem('userInfo')) || {};
+
+        const data = {
+                content:this.message
+            }
+        // 如果reply有值，说明当前是一条回复的评论
+            if(this.reply.id){
+                // parent_id 就是回复的评论的id
+                data.parent_id = this.reply.id;
+            }
         // 发布评论的请求
         this.$axios({
             url:"/post_comment/" + this.pid,
@@ -162,9 +178,7 @@ methods:{
             headers: {
                 Authorization: token
             },
-            data:{
-                content:this.message
-            }
+            data,
         }).then(res=>{
             // console.log(res);
             this.message = "";
@@ -175,6 +189,18 @@ methods:{
             this.pageIndex = 1;
             this.getList();
         })
+    },
+    // 点击回复按钮触发的事件
+    handleReply(item){
+        // 因为点击时候失去焦点，已经触发了handleBlur事件
+        setTimeout(() => {
+            // 记录下来当前回复的评论信息,就是我们的评论在回复item
+            this.reply = item;
+            // 弹起输入框
+            this.isFocus = true;
+            // 输入框获得焦点
+            this.$refs.textarea.focus();
+        }, 200)
     }
 
 },
