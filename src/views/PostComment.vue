@@ -53,7 +53,7 @@
                 @blur="handleBlur"
                 />
 
-            <span class="submit" v-if="isFocus">发布</span>
+            <span class="submit" v-if="isFocus" @click="handleSubmit">发布</span>
         </div>
 
 
@@ -142,7 +142,39 @@ methods:{
     },
     // 评论输入框失去焦点时候触发
     handleBlur(){
-        this.isFocus = false;
+        // 失去焦点时候，不要立马就隐藏发布按钮，需要在按钮点击之后再隐藏
+        setTimeout(() => {
+            this.isFocus = false;
+        }, 100)
+    },
+     // 发布评论
+    handleSubmit(){
+        // 评论的内容不能为空
+        if(this.message.trim() == ""){
+            return;
+        }
+        // 用户能够看到发布的按钮，说明当前肯定是一个登陆的状态
+        const {token} = JSON.parse(localStorage.getItem('userInfo')) || {};
+        // 发布评论的请求
+        this.$axios({
+            url:"/post_comment/" + this.pid,
+            method:"post",
+            headers: {
+                Authorization: token
+            },
+            data:{
+                content:this.message
+            }
+        }).then(res=>{
+            // console.log(res);
+            this.message = "";
+            // 弹窗提示评论发布成功
+            this.$toast.success("发布成功");
+            // 重新请求列表数据
+            this.list = []; // 必须要清空，如果不清空会合并之前的评论
+            this.pageIndex = 1;
+            this.getList();
+        })
     }
 
 },
